@@ -1,17 +1,17 @@
 {
   "name": "list2dereference",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Export vhost command for dereferencing in Virtuoso from a list.",
-  "main": "src/index.js",
+  "main": "./src/main.js",
   "scripts": {
     "start": "node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": "./src/main.js",
   "author": "pasquale.lisena@eurecom.fr",
   "license": "Apache-2.0",
   "dependencies": {
     "argparse": "^1.0.10",
-    "esm": "^3.2.25",
     "yaml": "^1.8.2"
   },
   "devDependencies": {

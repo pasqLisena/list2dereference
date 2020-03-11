@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs');
 const YAML = require('yaml');
 const { ArgumentParser } = require('argparse');
