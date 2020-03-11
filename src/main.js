@@ -31,15 +31,18 @@ function run(config) {
   if (host.startsWith('http://') || host.startsWith('http://')) {
     throw Error('Host should not contain http(s):// ');
   }
-  const ls = [...new Set((config.list || []).concat(VIRTUOSO_DEFAULTS))];
 
   // virtuoso vhost
+  const ls = [...new Set((config.list || []))];
+  for (const s of VIRTUOSO_DEFAULTS) ls.remove(s);
   const all = ls.map((item, i) => toVhost(item, i, host)).join('\n\n');
   fs.writeFile('insert_vhost.sql', all, handleError);
 
   // apache
+  const apacheLs = [...new Set((config.list || []).concat(VIRTUOSO_DEFAULTS))];
   const template = fs.readFileSync(config.apache_conf || TEMPLATE_APACHE, 'utf8');
-  const apache = ls.map((item) => toApacheProxyPass(item, config.port));
+  const apache = apacheLs
+    .map((item) => toApacheProxyPass(item, config.port));
   const apacheCont = template
     .replace('%admin%', config.admin || 'you@example.org')
     .replace('%host%', host)
