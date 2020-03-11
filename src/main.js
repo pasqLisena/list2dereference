@@ -33,8 +33,9 @@ function run(config) {
   }
 
   // virtuoso vhost
-  const ls = [...new Set((config.list || []))];
-  for (const s of VIRTUOSO_DEFAULTS) ls.remove(s);
+  let ls = new Set((config.list || []));
+  for (const s of VIRTUOSO_DEFAULTS) ls.delete(s);
+  ls = [...ls];
   const all = ls.map((item, i) => toVhost(item, i, host)).join('\n\n');
   fs.writeFile('insert_vhost.sql', all, handleError);
 
