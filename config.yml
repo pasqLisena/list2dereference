@@ -1,6 +1,9 @@
 host: data.silknow.org # required
 port: 8873 # default 8889
+host: data.odeuropa.org # required
+port: 7200 # default 8889
 admin: troncy@eurecom.fr # default you@example.org
+triplestore: graphdb
 apache_conf: source.conf # if you want to customise the apache conf
 list: # default []
   - vocabulary
