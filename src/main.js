@@ -23,8 +23,10 @@ function toVhost(item, id, host, template) {
     .replace(/%%id%%/g, ++id);
 }
 
-function toApacheProxyPass(item, port = 8889) {
-  return `    ProxyPass /${item[0]} http://localhost:${port}/${item[1]}
+function toApacheProxyPass(item, port = 8889, triplestore) {
+  temp = triplestore === 'graphdb' ? `RewriteRule ^/${item[0]}(.*)$ http://%{SERVER_NAME}/resource?uri=http://data.odeuropa.eu/${item[0]}$1` : ''
+  return `    ${temp}
+      ProxyPass /${item[0]} http://localhost:${port}/${item[1]}
     ProxyPassReverse /${item[0]} http://localhost:${port}/${item[1]}
 `;
 }
@@ -65,11 +67,12 @@ function run(config) {
 
   const template = fs.readFileSync(config.apache_conf || TEMPLATE_APACHE, 'utf8');
   const apache = zip(apacheLs, apacheDest)
-    .map((item) => toApacheProxyPass(item, config.port));
+    .map((item) => toApacheProxyPass(item, config.port, triplestore));
+
   const apacheCont = template
-    .replace('%admin%', config.admin || 'you@example.org')
-    .replace('%host%', host)
-    .replace('%rules%', apache.join('\n\n'));
+    .replace(/%admin%/g, config.admin || 'you@example.org')
+    .replace(/%host%/g, host)
+    .replace(/%rules%/g, apache.join('\n\n'));
   fs.writeFile(`${host}.conf`, apacheCont, handleError);
 }
 
