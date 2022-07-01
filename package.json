@@ -1,6 +1,6 @@
 {
   "name": "list2dereference",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Export vhost command for dereferencing in Virtuoso from a list.",
   "main": "./src/main.js",
   "scripts": {

@@ -24,7 +24,8 @@ function toVhost(item, id, host, template) {
 }
 
 function toApacheProxyPass(item, port = 8889, triplestore) {
-  temp = triplestore === 'graphdb' ? `RewriteRule ^/${item[0]}(.*)$ http://%{SERVER_NAME}/resource?uri=http://data.odeuropa.eu/${item[0]}$1` : ''
+  to_conv = triplestore === 'graphdb' && !DEFAULTS[triplestore].includes(item[0])
+  temp = to_conv ? `RewriteRule ^/${item[0]}(.*)$ http://%{SERVER_NAME}/resource?uri=http://data.odeuropa.eu/${item[0]}$1` : ''
   return `    ${temp}
       ProxyPass /${item[0]} http://localhost:${port}/${item[1]}
     ProxyPassReverse /${item[0]} http://localhost:${port}/${item[1]}
